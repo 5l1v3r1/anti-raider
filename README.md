@@ -1,17 +1,22 @@
 # Anti 🕷
-Anti is a FAST Discord Server Nuker made with Python
+Anti is a Fast Threaded Discord Nuker made in Python - updating soon
 
 # Usage 🕸
-Install all needed modules, have your bot application's token ready and then run this command:
+Install all needed modules, have your Discord Bot's Token ready and then run this command:
 
     python anti.py
 
-When launched, just paste your Bot Token into the input space and then you should get this menu:
+When launched, just paste your Bot Token into the input space and then you should launch the command menu
 
-![image](https://user-images.githubusercontent.com/75194878/124406152-6a85e900-dd38-11eb-8b51-7a8976154fb3.png)
+Now just go to any server where your Discord Bot has Permissions*, and run a command:
+- $w `Set Bots Watching Status`
+- $nk `Nuke the Server`
+- $clear `Clears Terminal`
+- $help `Shows a help guide for the bot`
 
-Now just go to any server where your bot is present, and run any of the four simple commands,
->$w (Set Bots Watching Status), $nk (Nuke the Server), $clear (Clears Terminal) and $help (Shows a help guide for the bot)
+# Images 🖼
+![image](https://user-images.githubusercontent.com/75194878/171073852-8618c133-bd7c-4b1c-a7c6-1d2605537b48.png)
+
 
 Output:
 
@@ -19,5 +24,4 @@ Output:
 
 
 # Final Notes 📝
-
-Credit Respective Owners by leaving my name in the 'Creators' Box & **DO NOT** Sell this Product. 😠
+**To suport this repository, give it a star or leave a helpful pull request**

